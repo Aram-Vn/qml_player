@@ -10,12 +10,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Quick Multimedia)
+
+set(RESOURCE_FILE resources.qrc)
+qt_add_resources(RESOURCES ${RESOURCE_FILE})
 
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appmedia_player
     main.cpp
+    ${RESOURCES}
 )
 
 qt_add_qml_module(appmedia_player
@@ -25,15 +29,23 @@ qt_add_qml_module(appmedia_player
     QML_FILES
         qml/Main.qml
         qml/AudioInfoBox.qml
-        qml/TextButton.qml
+        qml/ImageButton.qml
 
     RESOURCES
         assets/icons/heart.png
         assets/icons/save-icon-5401.png
+        assets/icons/next.svg
+        assets/icons/previous.svg
+        assets/icons/pause.svg
+        assets/icons/play.svg
         
         assets/images/image1.jpg
         assets/images/image2.jpg
         assets/images/image3.jpg
+
+    RESOURCES
+        assets/videos/fire.mp4
+
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -48,7 +60,9 @@ set_target_properties(appmedia_player PROPERTIES
 )
 
 target_link_libraries(appmedia_player
-    PRIVATE Qt6::Quick
+    PRIVATE
+        Qt6::Quick
+        Qt6::Multimedia
 )
 
 include(GNUInstallDirs)

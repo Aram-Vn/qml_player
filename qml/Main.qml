@@ -51,7 +51,8 @@ Window {
             songIndex: 0
             title: "AAA"
             authorName: "BBB"
-            imageColor: "red"
+            imageSourse: "qrc:/assets/images/image1.jpg"
+
         }
 
         AudioInfoBox {
@@ -68,7 +69,7 @@ Window {
             songIndex: 1
             title: "AAA222"
             authorName: "BBB222"
-            imageColor: "blue"
+            videoSours: "qrc:/assets/videos/fire.mp4"
         }
 
         AudioInfoBox {
@@ -85,7 +86,7 @@ Window {
             songIndex:  2
             title: "AAA333"
             authorName: "BBB33"
-            imageColor: "green"
+            imageSourse: "qrc:/assets/images/image3.jpg"
         }
 
         QtObject {
@@ -130,46 +131,44 @@ Window {
         height: 100
         color: "#333333"
 
-                    Row {
-                anchors.centerIn: parent
+        Row {
+            anchors.centerIn: parent
 
-                spacing: 20
+            spacing: 25
 
-                TextButton {
-                    id: previousButton
+            ImageButton {
+                id: previousButton
 
-                    width: 50
-                    height: 50
+                width: 50
+                height: 50
 
-                    text: "<"
+                source: "qrc:assets/icons/previous.svg"
 
-                    onClicked: playerController.switchToPreviousSong()
-                }
-
-                TextButton {
-                    id: playPouseButton
-
-                    width: 75
-                    height: 50
-
-                    text: playerController.playing ? "pause" : "play"
-
-                    onClicked: playerController.playPause()
-                }
-
-                TextButton {
-                    id: nextButton
-
-                    width: 50
-                    height: 50
-
-                    text: ">"
-
-                    onClicked: playerController.switchNextSong()
-                }
-
-
+                onClicked: playerController.switchToPreviousSong()
             }
+
+            ImageButton {
+                id: playPouseButton
+
+                width: 50
+                height: 50
+
+                source: playerController.playing ? "qrc:/assets/icons/play.svg" : "qrc:/assets/icons/pause.svg"
+
+                onClicked: playerController.playPause()
+            }
+
+            ImageButton {
+                id: nextButton
+
+                width: 50
+                height: 50
+
+                source: "qrc:/assets/icons/next.svg"
+
+                onClicked: playerController.switchNextSong()
+            }
+        }
     }
 
 }

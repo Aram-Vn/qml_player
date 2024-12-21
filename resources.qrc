@@ -1,0 +1,18 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/">
+        <file>assets/videos/fire.mp4</file>
+        <file>assets/videos/fire_encoded.mp4</file>
+
+        <file>assets/icons/heart.png</file>
+        <file>assets/icons/next.svg</file>
+        <file>assets/icons/pause.svg</file>
+        <file>assets/icons/play.svg</file>
+        <file>assets/icons/previous.svg</file>
+        <file>assets/icons/save-icon-5401.png</file>
+        
+        <file>assets/images/image1.jpg</file>
+        <file>assets/images/image2.jpg</file>
+        <file>assets/images/image3.jpg</file>
+    </qresource>
+</RCC>
+
