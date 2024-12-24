@@ -1,5 +1,6 @@
 import QtQuick
 import QtMultimedia
+import com.my.PlayerController 1.0
 
 Item {
     id: root
@@ -10,7 +11,7 @@ Item {
     property alias imageSourse: albumImage.source
     property alias videoSours: albumVideo.source
 
-    visible: playerController.currentSongIndex === root.songIndex
+    visible: PlayerController.currentSongIndex === root.songIndex
 
     Image {
         id: albumImage

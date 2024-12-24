@@ -1,4 +1,5 @@
 import QtQuick
+import com.my.PlayerController
 
 Window {
     id: root
@@ -88,34 +89,6 @@ Window {
             authorName: "BBB33"
             imageSourse: "qrc:/assets/images/image3.jpg"
         }
-
-        QtObject {
-            id: playerController
-
-            property int currentSongIndex: 0
-            property int songCount: 3
-            property bool playing: false
-
-            function playPause() {
-                playing = !playing
-            }
-
-            function switchToPreviousSong() {
-                if (currentSongIndex > 0) {
-                    --currentSongIndex
-                } else [
-                    currentSongIndex = songCount - 1
-                ]
-            }
-
-            function switchNextSong() {
-                if (currentSongIndex + 1 >= songCount) {
-                    currentSongIndex = 0
-                } else {
-                    ++currentSongIndex
-                }
-            }
-        }
     }
 
     Rectangle {
@@ -144,7 +117,7 @@ Window {
 
                 source: "qrc:assets/icons/previous.svg"
 
-                onClicked: playerController.switchToPreviousSong()
+                onClicked: PlayerController.switchToPreviousSong()
             }
 
             ImageButton {
@@ -153,9 +126,9 @@ Window {
                 width: 50
                 height: 50
 
-                source: playerController.playing ? "qrc:/assets/icons/play.svg" : "qrc:/assets/icons/pause.svg"
+                source: PlayerController.playing ? "qrc:/assets/icons/play.svg" : "qrc:/assets/icons/pause.svg"
 
-                onClicked: playerController.playPause()
+                onClicked: PlayerController.playPause()
             }
 
             ImageButton {
@@ -166,9 +139,8 @@ Window {
 
                 source: "qrc:/assets/icons/next.svg"
 
-                onClicked: playerController.switchNextSong()
+                onClicked: PlayerController.switchToNextSong()
             }
         }
-    }
-
+    } 
 }

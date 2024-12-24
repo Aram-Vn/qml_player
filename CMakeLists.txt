@@ -19,6 +19,8 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appmedia_player
     main.cpp
+    PlayerController.h
+    PlayerController.cpp
     ${RESOURCES}
 )
 
