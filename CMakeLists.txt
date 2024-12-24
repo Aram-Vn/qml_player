@@ -30,22 +30,6 @@ qt_add_qml_module(appmedia_player
         qml/Main.qml
         qml/AudioInfoBox.qml
         qml/ImageButton.qml
-
-    RESOURCES
-        assets/icons/heart.png
-        assets/icons/save-icon-5401.png
-        assets/icons/next.svg
-        assets/icons/previous.svg
-        assets/icons/pause.svg
-        assets/icons/play.svg
-        
-        assets/images/image1.jpg
-        assets/images/image2.jpg
-        assets/images/image3.jpg
-
-    RESOURCES
-        assets/videos/fire.mp4
-
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
