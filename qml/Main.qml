@@ -1,5 +1,6 @@
 import QtQuick
-import com.my.PlayerController
+
+import media_player.PlayerController
 
 Window {
     id: root
@@ -126,7 +127,7 @@ Window {
                 width: 50
                 height: 50
 
-                source: PlayerController.playing ? "qrc:/assets/icons/play.svg" : "qrc:/assets/icons/pause.svg"
+                source: PlayerController.isPlaying ? "qrc:/assets/icons/play.svg" : "qrc:/assets/icons/pause.svg"
 
                 onClicked: PlayerController.playPause()
             }

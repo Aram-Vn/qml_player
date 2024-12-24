@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QIcon>
 
-#include "PlayerController.h"
+#include "include/PlayerController.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":/media_player/assets/icons/heart.png"));
 
     PlayerController* playerController = new PlayerController(&app);
-    qmlRegisterSingletonInstance("com.my.PlayerController", 1, 0, "PlayerController", playerController);
+    qmlRegisterSingletonInstance("media_player.PlayerController", 1, 0, "PlayerController", playerController);
 
     QQmlApplicationEngine engine;
     QObject::connect(

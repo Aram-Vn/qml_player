@@ -1,6 +1,7 @@
 import QtQuick
 import QtMultimedia
-import com.my.PlayerController 1.0
+
+import media_player.PlayerController
 
 Item {
     id: root

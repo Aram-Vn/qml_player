@@ -1,19 +1,19 @@
-#include "PlayerController.h"
+#include "../include/PlayerController.h"
 
-PlayerController::PlayerController(QObject *parent)
-    : QObject{parent},
+PlayerController::PlayerController(QObject* parent)
+    : QObject{ parent },
       m_currentSongIndex(0),
       m_songCount(3),
       m_isPlaying(false)
-{}
-
+{
+}
 
 int PlayerController::currentSongIndex() const
 {
     return m_currentSongIndex;
 }
 
-int PlayerController::songCount()const
+int PlayerController::songCount() const
 {
     return m_songCount;
 }
@@ -35,7 +35,6 @@ void PlayerController::switchToPreviousSong()
     }
 
     emit currentSongIndexChanged();
-
 }
 
 void PlayerController::switchToNextSong()
