@@ -20,6 +20,7 @@ set(RESOURCE_FILE resources.qrc)
 qt_add_resources(RESOURCES ${RESOURCE_FILE})
 
 qt_standard_project_setup(REQUIRES 6.5)
+qt_policy(SET QTP0004 NEW)
 
 file(GLOB_RECURSE SOURCE_FILES
     src/*
