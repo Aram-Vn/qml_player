@@ -7,6 +7,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(QT_QML_GENERATE_QMLLS_INI ON)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -20,11 +22,19 @@ qt_add_resources(RESOURCES ${RESOURCE_FILE})
 qt_standard_project_setup(REQUIRES 6.5)
 
 file(GLOB_RECURSE SOURCE_FILES
-    src/*.cpp
+    src/*
 )
 
 file(GLOB_RECURSE HEADER_FILES
-    include/*.h
+    include/*
+)
+
+file(GLOB_RECURSE FOR_QML_HEADER_FILES 
+    include/AudioInfo.h
+)
+
+file(GLOB_RECURSE FOR_QML_SOURCE_FILES 
+    src/AudioInfo.cpp
 )
 
 qt_add_executable(${TARGET_NAME}
@@ -34,14 +44,19 @@ qt_add_executable(${TARGET_NAME}
     ${RESOURCES}
 )
 
+target_include_directories(${TARGET_NAME} PRIVATE include)
+
 qt_add_qml_module(${TARGET_NAME}
     URI media_player
     VERSION 1.0
     RESOURCE_PREFIX /qml
     QML_FILES
-    qml/Main.qml
-    qml/AudioInfoBox.qml
-    qml/ImageButton.qml
+        qml/Main.qml
+        qml/AudioInfoBox.qml
+        qml/ImageButton.qml
+    SOURCES
+        ${FOR_QML_SOURCE_FILES}
+        ${FOR_QML_HEADER_FILES}
 )
 
 set(COMMON_COMPILE_OPTIONS

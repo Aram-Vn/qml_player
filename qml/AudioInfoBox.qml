@@ -2,91 +2,98 @@ import QtQuick
 import QtMultimedia
 
 import media_player.PlayerController
+import media_player
 
 Item {
     id: root
 
-    required property int songIndex
-    property alias title: titleText.text
-    property alias authorName: authorText.text
-    property alias imageSourse: albumImage.source
-    property alias videoSours: albumVideo.source
+    readonly property AudioInfo infoProvider: AudioInfo {}
 
-    visible: PlayerController.currentSongIndex === root.songIndex
+    visible: PlayerController.currentSongIndex === infoProvider.songIndex
 
-    Image {
-        id: albumImage
+  Image {
+    id: albumImage
 
-        anchors {
-            verticalCenter: parent.verticalCenter
-            left: parent.left
-        }
-
-        width: 150
-        height: 150
-        
+    anchors {
+      verticalCenter: parent.verticalCenter
+      left: parent.left
     }
 
-    Video {
-        id: albumVideo
+    width: 150
+    height: 150
 
-        anchors {
-            verticalCenter: parent.verticalCenter
-            left: parent.left
-        }
+    source: infoProvider.imageSource
+  }
 
-        width: 150
-        height: 150
+  Video {
+    id: albumVideo
 
-        loops: MediaPlayer.Infinite
-        volume: 0
+    anchors {
+      verticalCenter: parent.verticalCenter
+      left: parent.left
     }
 
-    Text {
-        id: titleText
+    width: 150
+    height: 150
 
-        anchors {
-            bottom: parent.verticalCenter
-            left: albumImage.right
-            right: parent.right
-            margins: 20
-        }
+    loops: MediaPlayer.Infinite
+    volume: 0
 
-        color: "white"
-        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+    source: infoProvider.videoSource
+  }
 
-        font {
-            pixelSize: 20
-            bold: true
-        }
+  Text {
+    id: titleText
+
+    anchors {
+      bottom: parent.verticalCenter
+      left: albumImage.right
+      margins: 20
+      right: parent.right
     }
 
-    Text {
-        id: authorText
+    color: "white"
+    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+    text: infoProvider.title
 
-        anchors {
-            top: parent.verticalCenter
-            left: titleText.left
-            right: parent.right
-            topMargin: 5
-        }
+    font {
+      pixelSize: 20
+      bold: true
+    }
+  }
 
-        color: "gray"
-        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+  Text {
+    id: authorText
 
-        font {
-            pixelSize: 17
-        }
+    anchors {
+      top: parent.verticalCenter
+      left: titleText.left
+      topMargin: 5
+      right: parent.right
     }
 
-    onVisibleChanged: {
-        onVisibleChanged: {
-            if (visible) {
-                albumVideo.play()
-            } else {
-                albumVideo.seek(0)
-                albumVideo.stop()
-            }
-        }
+    color: "gray"
+    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+    text: infoProvider.authorName
+
+    font {
+      pixelSize: 16
     }
+  }
+
+  onVisibleChanged: {
+    if (visible) {
+      albumVideo.play()
+      PlayerController.changeAudioSource(infoProvider.audioSource)
+    } else {
+      albumVideo.seek(0)
+      albumVideo.stop()
+    }
+  }
+
+  Component.onCompleted: {
+    if (PlayerController.currentSongIndex === infoProvider.songIndex) {
+      PlayerController.changeAudioSource(infoProvider.audioSource)
+    }
+  }
 }

@@ -50,10 +50,13 @@ Window {
                 margins: 20
             }
 
-            songIndex: 0
-            title: "AAA"
-            authorName: "BBB"
-            imageSourse: "qrc:/assets/images/image1.jpg"
+            infoProvider {
+                songIndex: 0
+                title: "AAA"
+                authorName: "BBB"
+                imageSource: "qrc:/assets/images/image1.jpg"
+                audioSource: "qrc:/SongPlayer/assets/audio/symphony_no_5.mp3"
+            }
 
         }
 
@@ -68,10 +71,13 @@ Window {
                 margins: 20
             }
 
-            songIndex: 1
-            title: "AAA222"
-            authorName: "BBB222"
-            videoSours: "qrc:/assets/videos/fire.mp4"
+            infoProvider {
+                songIndex: 1
+                title: "AAA222"
+                authorName: "BBB222"
+                videoSource: "qrc:/assets/videos/fire.mp4"
+                audioSource: "qrc:/SongPlayer/assets/audio/symphony_no_5.mp3"
+            }
         }
 
         AudioInfoBox {
@@ -85,10 +91,13 @@ Window {
                 margins: 20
             }
 
-            songIndex:  2
-            title: "AAA333"
-            authorName: "BBB33"
-            imageSourse: "qrc:/assets/images/image3.jpg"
+            infoProvider {
+                songIndex:  2
+                title: "AAA333"
+                authorName: "BBB33"
+                imageSource: "qrc:/assets/images/image3.jpg"
+                audioSource: "qrc:/SongPlayer/assets/audio/symphony_no_5.mp3"
+            }
         }
     }
 
