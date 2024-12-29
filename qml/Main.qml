@@ -55,7 +55,7 @@ Window {
                 title: "AAA"
                 authorName: "BBB"
                 imageSource: "qrc:/assets/images/image1.jpg"
-                audioSource: "qrc:/SongPlayer/assets/audio/symphony_no_5.mp3"
+                audioSource: "qrc:/assets/audio/symphony_no_5.mp3"
             }
 
         }
@@ -76,7 +76,7 @@ Window {
                 title: "AAA222"
                 authorName: "BBB222"
                 videoSource: "qrc:/assets/videos/fire.mp4"
-                audioSource: "qrc:/SongPlayer/assets/audio/symphony_no_5.mp3"
+                audioSource: "qrc:/assets/audio/symphony_no_5.mp3"
             }
         }
 
@@ -96,7 +96,7 @@ Window {
                 title: "AAA333"
                 authorName: "BBB33"
                 imageSource: "qrc:/assets/images/image3.jpg"
-                audioSource: "qrc:/SongPlayer/assets/audio/symphony_no_5.mp3"
+                audioSource: "qrc:/assets/audio/symphony_no_5.mp3"
             }
         }
     }
@@ -136,7 +136,7 @@ Window {
                 width: 50
                 height: 50
 
-                source: PlayerController.isPlaying ? "qrc:/assets/icons/play.svg" : "qrc:/assets/icons/pause.svg"
+                source: PlayerController.isPlaying ? "qrc:/assets/icons/pause.svg" : "qrc:/assets/icons/play.svg"
 
                 onClicked: PlayerController.playPause()
             }
@@ -152,5 +152,5 @@ Window {
                 onClicked: PlayerController.switchToNextSong()
             }
         }
-    } 
+    }
 }

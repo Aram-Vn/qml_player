@@ -30,11 +30,11 @@ file(GLOB_RECURSE HEADER_FILES
     include/*
 )
 
-file(GLOB_RECURSE FOR_QML_HEADER_FILES 
+file(GLOB_RECURSE FOR_QML_HEADER_FILES
     include/AudioInfo.h
 )
 
-file(GLOB_RECURSE FOR_QML_SOURCE_FILES 
+file(GLOB_RECURSE FOR_QML_SOURCE_FILES
     src/AudioInfo.cpp
 )
 
@@ -45,7 +45,8 @@ qt_add_executable(${TARGET_NAME}
     ${RESOURCES}
 )
 
-target_include_directories(${TARGET_NAME} PRIVATE include)
+# to make Qml see my class(include/AudioInfo.h)
+target_include_directories(${TARGET_NAME} PRIVATE include qml)
 
 qt_add_qml_module(${TARGET_NAME}
     URI media_player

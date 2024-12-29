@@ -11,89 +11,89 @@ Item {
 
     visible: PlayerController.currentSongIndex === infoProvider.songIndex
 
-  Image {
-    id: albumImage
+    Image {
+        id: albumImage
 
-    anchors {
-      verticalCenter: parent.verticalCenter
-      left: parent.left
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: parent.left
+        }
+
+        width: 150
+        height: 150
+
+        source: root.infoProvider.imageSource
     }
 
-    width: 150
-    height: 150
+    Video {
+        id: albumVideo
 
-    source: infoProvider.imageSource
-  }
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: parent.left
+        }
 
-  Video {
-    id: albumVideo
+        width: 150
+        height: 150
 
-    anchors {
-      verticalCenter: parent.verticalCenter
-      left: parent.left
+        loops: MediaPlayer.Infinite
+        volume: 0
+
+        source: root.infoProvider.videoSource
     }
 
-    width: 150
-    height: 150
+    Text {
+        id: titleText
 
-    loops: MediaPlayer.Infinite
-    volume: 0
+        anchors {
+            bottom: parent.verticalCenter
+            left: albumImage.right
+            margins: 20
+            right: parent.right
+        }
 
-    source: infoProvider.videoSource
-  }
+        color: "white"
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        text: root.infoProvider.title
 
-  Text {
-    id: titleText
-
-    anchors {
-      bottom: parent.verticalCenter
-      left: albumImage.right
-      margins: 20
-      right: parent.right
+        font {
+            pixelSize: 20
+            bold: true
+        }
     }
 
-    color: "white"
-    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-    text: infoProvider.title
+    Text {
+        id: authorText
 
-    font {
-      pixelSize: 20
-      bold: true
+        anchors {
+            top: parent.verticalCenter
+            left: titleText.left
+            topMargin: 5
+            right: parent.right
+        }
+
+        color: "gray"
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        text: root.infoProvider.authorName
+
+        font {
+            pixelSize: 16
+        }
     }
-  }
 
-  Text {
-    id: authorText
-
-    anchors {
-      top: parent.verticalCenter
-      left: titleText.left
-      topMargin: 5
-      right: parent.right
+    onVisibleChanged: {
+        if (visible) {
+            albumVideo.play()
+            PlayerController.changeAudioSource(infoProvider.audioSource)
+        } else {
+            albumVideo.seek(0)
+            albumVideo.stop()
+        }
     }
 
-    color: "gray"
-    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-    text: infoProvider.authorName
-
-    font {
-      pixelSize: 16
+    Component.onCompleted: {
+        if (PlayerController.currentSongIndex === infoProvider.songIndex) {
+            PlayerController.changeAudioSource(infoProvider.audioSource)
+        }
     }
-  }
-
-  onVisibleChanged: {
-    if (visible) {
-      albumVideo.play()
-      PlayerController.changeAudioSource(infoProvider.audioSource)
-    } else {
-      albumVideo.seek(0)
-      albumVideo.stop()
-    }
-  }
-
-  Component.onCompleted: {
-    if (PlayerController.currentSongIndex === infoProvider.songIndex) {
-      PlayerController.changeAudioSource(infoProvider.audioSource)
-    }
-  }
 }

@@ -17,7 +17,7 @@ Image {
         hoverEnabled: true
 
         onClicked: {
-           root.clicked()
+            root.clicked()
         }
     }
 }
