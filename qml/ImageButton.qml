@@ -6,7 +6,8 @@ Image {
     signal clicked
 
     opacity: buttonMouseArea.containsMouse ? 0.75 : 1
-    // mipmap: true
+    mipmap: true
+    fillMode: Image.PreserveAspectFit
 
 
     MouseArea {
