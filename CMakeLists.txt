@@ -22,12 +22,12 @@ qt_add_resources(RESOURCES ${RESOURCE_FILE})
 qt_standard_project_setup(REQUIRES 6.5)
 qt_policy(SET QTP0004 NEW)
 
-file(GLOB_RECURSE SOURCE_FILES
-    src/*
+file(GLOB_RECURSE HEADER_FILES
+    include/PlayerController.h
 )
 
-file(GLOB_RECURSE HEADER_FILES
-    include/*
+file(GLOB_RECURSE SOURCE_FILES
+    src/PlayerController.cpp
 )
 
 file(GLOB_RECURSE FOR_QML_HEADER_FILES
@@ -36,6 +36,10 @@ file(GLOB_RECURSE FOR_QML_HEADER_FILES
 
 file(GLOB_RECURSE FOR_QML_SOURCE_FILES
     src/AudioInfo.cpp
+)
+
+file(GLOB_RECURSE QML_FILES RELATIVE ${CMAKE_SOURCE_DIR}
+    qml/*.qml
 )
 
 qt_add_executable(${TARGET_NAME}
@@ -53,14 +57,11 @@ qt_add_qml_module(${TARGET_NAME}
     VERSION 1.0
     RESOURCE_PREFIX /qml
     QML_FILES
-        qml/Main.qml
-        qml/AudioInfoBox.qml
-        qml/ImageButton.qml
+    ${QML_FILES}
     SOURCES
-        ${FOR_QML_SOURCE_FILES}
-        ${FOR_QML_HEADER_FILES}
+    ${FOR_QML_SOURCE_FILES}
+    ${FOR_QML_HEADER_FILES}
 )
-
 set(COMMON_COMPILE_OPTIONS
     -Wall
     -Wextra

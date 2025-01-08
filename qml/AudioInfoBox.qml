@@ -1,15 +1,13 @@
 import QtQuick
 import QtMultimedia
 
-import media_player.PlayerController
+import com.media_player.PlayerController
 import media_player
 
 Item {
     id: root
 
-    readonly property AudioInfo infoProvider: AudioInfo {}
-
-    visible: PlayerController.currentSongIndex === infoProvider.songIndex
+    visible: !!PlayerController.currentSong
 
     Image {
         id: albumImage
@@ -22,7 +20,7 @@ Item {
         width: 150
         height: 150
 
-        source: root.infoProvider.imageSource
+        source: !!PlayerController.currentSong ? PlayerController.currentSong.imageSource : ""
     }
 
     Video {
@@ -39,7 +37,15 @@ Item {
         loops: MediaPlayer.Infinite
         volume: 0
 
-        source: root.infoProvider.videoSource
+        source: !!PlayerController.currentSong ? PlayerController.currentSong.videoSource : ""
+
+        onSourceChanged: {
+            if (source != "") {
+                play()
+            } else {
+                stop()
+            }
+        }
     }
 
     Text {
@@ -54,7 +60,7 @@ Item {
 
         color: "white"
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        text: root.infoProvider.title
+        text: !!PlayerController.currentSong ? PlayerController.currentSong.title : ""
 
         font {
             pixelSize: 20
@@ -74,7 +80,7 @@ Item {
 
         color: "gray"
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        text: root.infoProvider.authorName
+        text: !!PlayerController.currentSong ? PlayerController.currentSong.authorName : ""
 
         font {
             pixelSize: 16
@@ -84,16 +90,9 @@ Item {
     onVisibleChanged: {
         if (visible) {
             albumVideo.play()
-            PlayerController.changeAudioSource(infoProvider.audioSource)
         } else {
             albumVideo.seek(0)
             albumVideo.stop()
-        }
-    }
-
-    Component.onCompleted: {
-        if (PlayerController.currentSongIndex === infoProvider.songIndex) {
-            PlayerController.changeAudioSource(infoProvider.audioSource)
         }
     }
 }

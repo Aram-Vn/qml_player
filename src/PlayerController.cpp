@@ -1,74 +1,109 @@
 #include "../include/PlayerController.h"
+#include "../include/AudioInfo.h"
 
 PlayerController::PlayerController(QObject* parent)
-    : QObject{ parent },
-      m_currentSongIndex(0),
-      m_songCount(3),
-      m_isPlaying(false)
+    : QAbstractListModel{ parent },
+      m_Isplaying{ false },
+      m_currentSong{ nullptr }
 {
     const auto& audioOutputs = QMediaDevices::audioOutputs();
     if (!audioOutputs.isEmpty())
     {
         m_mediaPlayer.setAudioOutput(new QAudioOutput(&m_mediaPlayer));
     }
+
+    addAudio("Eine Kleine Nachtmusik", "Wolfgang Amadeus Mozart", QUrl("qrc:/assets/audio/symphony_no_5.mp3"),
+             QUrl("qrc:/assets/images/image1.jpg"));
+
+    addAudio("Symphony No. 5", "Ludwig Van Beethoven", QUrl("qrc:/assets/audio/symphony_no_5.mp3"),
+             QUrl("qrc:/assets/images/image2.jpg"));
+
+    addAudio("Air on the G String", "Johann Sebastian Bach", QUrl("qrc:/assets/audio/symphony_no_5.mp3"),
+             QUrl("qrc:/assets/images/image3.jpg"), QUrl("qrc:/assets/videos/video_1.avi"));
 }
 
-int PlayerController::currentSongIndex() const
+bool PlayerController::playing() const
 {
-    return m_currentSongIndex;
+    return m_Isplaying;
 }
 
-int PlayerController::songCount() const
+int PlayerController::rowCount(const QModelIndex& parent) const
 {
-    return m_songCount;
+    Q_UNUSED(parent);
+    return m_audioList.length();
 }
 
-bool PlayerController::isPlaying() const
+QVariant PlayerController::data(const QModelIndex& index, int role) const
 {
-    return m_isPlaying;
+    if (index.isValid() && index.row() >= 0 && index.row() < m_audioList.length())
+    {
+        AudioInfo* audioInfo = m_audioList[index.row()];
+
+        switch (static_cast<Role>(role))
+        {
+            case AudioTitleRole: return audioInfo->title();
+            case AudioAuthorNameRole: return audioInfo->authorName();
+            case AudioSourceRole: return audioInfo->audioSource();
+            case AudioImageSourceRole: return audioInfo->imageSource();
+            case AudioVideoSourceRole: return audioInfo->videoSource();
+        }
+    }
+
+    return {};
+}
+
+QHash<int, QByteArray> PlayerController::roleNames() const
+{
+    QHash<int, QByteArray> result;
+
+    result[AudioAuthorNameRole]  = "audioAuthorName";
+    result[AudioTitleRole]       = "audioTitle";
+    result[AudioSourceRole]      = "audioSource";
+    result[AudioImageSourceRole] = "audioImageSource";
+    result[AudioVideoSourceRole] = "audioVideoSource";
+
+    return result;
 }
 
 void PlayerController::switchToPreviousSong()
 {
-    if (m_currentSongIndex - 1 == 0)
+    const int index = m_audioList.indexOf(m_currentSong);
+    if (index - 1 < 0)
     {
-        m_currentSongIndex = m_songCount - 1;
+        setCurrentSong(m_audioList.last());
     }
     else
     {
-        --m_currentSongIndex;
+        setCurrentSong(m_audioList[index - 1]);
     }
-
-    emit currentSongIndexChanged();
 }
 
 void PlayerController::switchToNextSong()
 {
-    if (m_currentSongIndex + 1 >= m_songCount)
+    const int index = m_audioList.indexOf(m_currentSong);
+
+    if (index + 1 >= m_audioList.length())
     {
-        m_currentSongIndex = 0;
+        setCurrentSong(m_audioList.first());
     }
     else
     {
-        ++m_currentSongIndex;
+        setCurrentSong(m_audioList[index + 1]);
     }
-
-    emit currentSongIndexChanged();
 }
 
 void PlayerController::playPause()
 {
-    m_isPlaying = !m_isPlaying;
+    m_Isplaying = !m_Isplaying;
+    emit playingChanged();
 
-    emit isPlayingChanged();
-
-    if (m_isPlaying)
+    if (m_Isplaying)
     {
         m_mediaPlayer.play();
     }
     else
     {
-        m_mediaPlayer.stop();
+        m_mediaPlayer.pause();
     }
 }
 
@@ -77,8 +112,101 @@ void PlayerController::changeAudioSource(const QUrl& source)
     m_mediaPlayer.stop();
     m_mediaPlayer.setSource(source);
 
-    if (m_isPlaying)
+    if (m_Isplaying)
     {
         m_mediaPlayer.play();
+    }
+}
+
+void PlayerController::addAudio(const QString& title, const QString& authorName, const QUrl& audioSource,
+                                const QUrl& imageSource, const QUrl& videoSource)
+{
+    beginInsertRows(QModelIndex(), m_audioList.length(), m_audioList.length());
+
+    AudioInfo* audioInfo = new AudioInfo(this);
+
+    audioInfo->setTitle(title);
+    audioInfo->setAuthorName(authorName);
+    audioInfo->setAudioSource(audioSource);
+    audioInfo->setImageSource(imageSource);
+    audioInfo->setVideoSource(videoSource);
+
+    if (m_audioList.isEmpty())
+    {
+        setCurrentSong(audioInfo);
+    }
+
+    m_audioList << audioInfo;
+
+    endInsertRows();
+}
+
+void PlayerController::removeAudio(int index)
+{
+    if (index >= 0 && index < m_audioList.length())
+    {
+        beginRemoveRows(QModelIndex(), index, index);
+
+        AudioInfo* toRemove = m_audioList[index];
+
+        if (toRemove == m_currentSong)
+        {
+            if (m_audioList.length() > 1)
+            {
+                if (index != 0)
+                {
+                    setCurrentSong(m_audioList[index - 1]);
+                }
+                else
+                {
+                    setCurrentSong(m_audioList[index + 1]);
+                }
+            }
+            else
+            {
+                setCurrentSong(nullptr);
+            }
+        }
+
+        m_audioList.removeAt(index);
+        toRemove->deleteLater();
+
+        endRemoveRows();
+    }
+}
+
+void PlayerController::switchToAudioByIndex(int index)
+{
+    if (index >= 0 && index < m_audioList.length())
+    {
+        setCurrentSong(m_audioList[index]);
+    }
+}
+
+AudioInfo* PlayerController::currentSong() const
+{
+    return m_currentSong;
+}
+
+void PlayerController::setCurrentSong(AudioInfo* newCurrentSong)
+{
+    if (m_currentSong == newCurrentSong)
+    {
+        return;
+    }
+
+    m_currentSong = newCurrentSong;
+    emit currentSongChanged();
+
+    if (m_currentSong)
+    {
+        changeAudioSource(m_currentSong->audioSource());
+    }
+    else
+    {
+        m_mediaPlayer.stop();
+        m_mediaPlayer.setSource(QUrl());
+        m_Isplaying = false;
+        emit playingChanged();
     }
 }

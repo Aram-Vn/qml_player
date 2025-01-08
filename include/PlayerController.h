@@ -1,45 +1,66 @@
 #ifndef PLAYERCONTROLLER_H
 #define PLAYERCONTROLLER_H
 
+#include <QAbstractListModel>
 #include <QAudioDevice>
 #include <QAudioOutput>
 #include <QMediaDevices>
 #include <QMediaPlayer>
-#include <QObject>
-#include <qurl.h>
 
-class PlayerController : public QObject
+class AudioInfo;
+
+class PlayerController : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(int currentSongIndex READ currentSongIndex NOTIFY currentSongIndexChanged FINAL)
-    Q_PROPERTY(int songCount READ songCount NOTIFY songCountChanged FINAL)
-    Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY isPlayingChanged FINAL)
+    Q_PROPERTY(bool playing READ playing NOTIFY playingChanged)
+    Q_PROPERTY(AudioInfo* currentSong READ currentSong WRITE setCurrentSong NOTIFY currentSongChanged)
 
 public:
     explicit PlayerController(QObject* parent = nullptr);
 
 public:
-    int  currentSongIndex() const;
-    int  songCount() const;
-    bool isPlaying() const;
+    bool playing() const;
+
+public:
+    virtual int                    rowCount(const QModelIndex& parent) const override;
+    virtual QVariant               data(const QModelIndex& index, int role) const override;
+    virtual QHash<int, QByteArray> roleNames() const override;
+
+    AudioInfo* currentSong() const;
+    void       setCurrentSong(AudioInfo* newCurrentSong);
 
 public slots:
     void switchToPreviousSong();
     void switchToNextSong();
     void playPause();
     void changeAudioSource(const QUrl& source);
+    void addAudio(const QString& title, const QString& authorName, const QUrl& audioSource, const QUrl& imageSource,
+                  const QUrl& videoSource = QUrl());
+    void removeAudio(int index);
+    void switchToAudioByIndex(int index);
 
 signals:
-    void currentSongIndexChanged();
-    void songCountChanged();
-    void isPlayingChanged();
+    void playingChanged();
+
+    void currentSongChanged();
+
+public:
+    enum Role
+    {
+        AudioTitleRole = Qt::UserRole + 1,
+        AudioAuthorNameRole,
+        AudioSourceRole,
+        AudioImageSourceRole,
+        AudioVideoSourceRole
+    };
 
 private:
-    int          m_currentSongIndex;
-    int          m_songCount;
-    bool         m_isPlaying;
+    bool         m_Isplaying;
     QMediaPlayer m_mediaPlayer;
+
+    QList<AudioInfo*> m_audioList;
+    AudioInfo*        m_currentSong;
 };
 
 #endif // PLAYERCONTROLLER_H

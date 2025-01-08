@@ -1,38 +1,52 @@
 import QtQuick
 
-import media_player.PlayerController
+import com.media_player.PlayerController
 
 Window {
     id: root
 
-    width: 640
-    height: 480
+    width: 480
+    height: 640
 
     visible: true
 
     title: qsTr("Song Player")
 
     Rectangle {
-        id: topBar
+        id: topbar
 
-        anchors{
+        anchors {
             top: parent.top
-
             left: parent.left
             right: parent.right
         }
 
         height: 50
-        color: "#2a2a2a"
+        color: "#272727"
+
+        ImageButton {
+            anchors {
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+                rightMargin: 20
+            }
+
+            width: 32
+            height: 32
+            source: "qrc:assets/icons/burger-bar.png"
+
+            onClicked: {
+                playlistPanel.hidden = !playlistPanel.hidden
+            }
+        }
     }
 
     Rectangle {
         id: mainSection
 
         anchors {
-            top: topBar.bottom
-            bottom: bottomBar.top
-
+            top: topbar.bottom
+            bottom: bottombar.top
             left: parent.left
             right: parent.right
         }
@@ -40,73 +54,22 @@ Window {
         color: "#1e1e1e"
 
         AudioInfoBox {
-            id: firstSong
+            id: songInfo
 
             anchors {
                 verticalCenter: parent.verticalCenter
                 left: parent.left
                 right: parent.right
-
                 margins: 20
-            }
-
-            infoProvider {
-                songIndex: 0
-                title: "AAA"
-                authorName: "BBB"
-                imageSource: "qrc:/assets/images/image1.jpg"
-                audioSource: "qrc:/assets/audio/symphony_no_5.mp3"
-            }
-
-        }
-
-        AudioInfoBox {
-            id: secondSong
-
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-                right: parent.right
-
-                margins: 20
-            }
-
-            infoProvider {
-                songIndex: 1
-                title: "AAA222"
-                authorName: "BBB222"
-                videoSource: "qrc:/assets/videos/fire.mp4"
-                audioSource: "qrc:/assets/audio/symphony_no_5.mp3"
-            }
-        }
-
-        AudioInfoBox {
-            id: thirdSong
-
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-                right: parent.right
-
-                margins: 20
-            }
-
-            infoProvider {
-                songIndex:  2
-                title: "AAA333"
-                authorName: "BBB33"
-                imageSource: "qrc:/assets/images/image3.jpg"
-                audioSource: "qrc:/assets/audio/symphony_no_5.mp3"
             }
         }
     }
 
     Rectangle {
-        id: bottomBar
+        id: bottombar
 
-        anchors{
+        anchors {
             bottom: parent.bottom
-
             left: parent.left
             right: parent.right
         }
@@ -117,26 +80,28 @@ Window {
         Row {
             anchors.centerIn: parent
 
-            spacing: 25
+            spacing: 20
+            enabled: !!PlayerController.currentSong
+            opacity: enabled ? 1 : 0.3
 
             ImageButton {
                 id: previousButton
 
-                width: 50
-                height: 50
+                width: 64
+                height: 64
 
-                source: "qrc:assets/icons/previous.svg"
+                source: "qrc:/assets/icons/previous.svg"
 
                 onClicked: PlayerController.switchToPreviousSong()
             }
 
             ImageButton {
-                id: playPouseButton
+                id: playPauseButton
 
-                width: 50
-                height: 50
+                width: 64
+                height: 64
 
-                source: PlayerController.isPlaying ? "qrc:/assets/icons/pause.svg" : "qrc:/assets/icons/play.svg"
+                source: PlayerController.playing ? "qrc:/assets/icons/pause.svg" : "qrc:/assets/icons/play.svg"
 
                 onClicked: PlayerController.playPause()
             }
@@ -144,13 +109,23 @@ Window {
             ImageButton {
                 id: nextButton
 
-                width: 50
-                height: 50
+                width: 64
+                height: 64
 
                 source: "qrc:/assets/icons/next.svg"
 
                 onClicked: PlayerController.switchToNextSong()
             }
         }
+    }
+
+    PlaylistPanel {
+        id: playlistPanel
+
+        anchors {
+            top: topbar.bottom
+        }
+
+        x: hidden ? parent.width : parent.width - width
     }
 }

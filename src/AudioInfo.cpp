@@ -13,7 +13,10 @@ int AudioInfo::songIndex() const
 void AudioInfo::setSongIndex(int newSongIndex)
 {
     if (m_songIndex == newSongIndex)
+    {
         return;
+    }
+
     m_songIndex = newSongIndex;
     emit songIndexChanged();
 }
@@ -26,7 +29,10 @@ QString AudioInfo::title() const
 void AudioInfo::setTitle(const QString& newTitle)
 {
     if (m_title == newTitle)
+    {
         return;
+    }
+
     m_title = newTitle;
     emit titleChanged();
 }
@@ -39,7 +45,10 @@ QString AudioInfo::authorName() const
 void AudioInfo::setAuthorName(const QString& newAuthorName)
 {
     if (m_authorName == newAuthorName)
+    {
         return;
+    }
+
     m_authorName = newAuthorName;
     emit authorNameChanged();
 }
@@ -52,7 +61,10 @@ QUrl AudioInfo::imageSource() const
 void AudioInfo::setImageSource(const QUrl& newImageSource)
 {
     if (m_imageSource == newImageSource)
+    {
         return;
+    }
+
     m_imageSource = newImageSource;
     emit imageSourceChanged();
 }
@@ -65,7 +77,10 @@ QUrl AudioInfo::videoSource() const
 void AudioInfo::setVideoSource(const QUrl& newVideoSource)
 {
     if (m_videoSource == newVideoSource)
+    {
         return;
+    }
+
     m_videoSource = newVideoSource;
     emit videoSourceChanged();
 }
@@ -78,7 +93,10 @@ QUrl AudioInfo::audioSource() const
 void AudioInfo::setAudioSource(const QUrl& newAudioSource)
 {
     if (m_audioSource == newAudioSource)
+    {
         return;
+    }
+
     m_audioSource = newAudioSource;
     emit audioSourceChanged();
 }

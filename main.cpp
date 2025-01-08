@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     PlayerController* playerController = new PlayerController(&app);
-    qmlRegisterSingletonInstance("media_player.PlayerController", 1, 0, "PlayerController", playerController);
+    qmlRegisterSingletonInstance("com.media_player.PlayerController", 1, 0, "PlayerController", playerController);
 
     QObject::connect(
         &engine,
